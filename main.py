@@ -12,7 +12,7 @@ from flask import Flask,render_template
 # if flask version is shown,then its installed,else:
 # pip install flask
 # This command will install it.
-
+# curl https://www.007.com/wp-json/ -I -H origin:https://www.hacktify.in/
 # Flask constructor initializor that says this main.py file works as a flask app
 app = Flask(__name__)
 
@@ -121,9 +121,9 @@ if __name__ =='__main__':
         else:
             print('Invalid URL.Please Try Entering A Valid URL.')
     
-    Thread(target = fun1,args=(url,)).start()
-    Thread(target = fun2,args=(modurl,)).start()
-    Thread(target = fun3,args=(url,modurl,origin)).start()
-
+    # Thread(target = fun1,args=(url,)).start()
+    # Thread(target = fun2,args=(modurl,)).start()
+    # Thread(target = fun3,args=(url,modurl,origin)).start()
+    fun3(url,modurl,origin)
     # Tells the flask app to run.Nescessary when using Flask.
     app.run()
