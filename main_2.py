@@ -28,9 +28,9 @@ def fun2(modurl):
 def fun3(url,modurl,origin):
 
     modurl = modurl.split('.')[0]
-    # os.system("curl {} -I -H origin:{} > {}.txt ".format(url,origin,modurl))
+    os.system("curl {} -I -H origin:{} > {}.txt ".format(url,origin,modurl))
     dict1={}
-    # with open("{}.txt".format(modurl)) as fh:
+    #with open("{}.txt".format(modurl)) as fh:
   
     #     for line in fh: 
   
@@ -58,27 +58,29 @@ def fun3(url,modurl,origin):
     if 'Access-Control-Allow-Origin:' and 'Access-Control-Allow-Credentials:' in dic.keys():
         
         if dic.get('Access-Control-Allow-Origin:')[0] == origin and dic.get('Access-Control-Allow-Credentials:')[0]=='true':
-            s=dic.get('Link:')[0]
-            print(s)
-            l1=s.split(';',1)[0]
-            l1=l1.split('<',1)[1]
-            l1=l1.split('>',1)[0]
-            print('Case 1 Possible.The entered domain is subject to exploitation.')
-            
-            # flask route 
-            @app.route('/')
-            def index():
-                return render_template('CORS.html',link=l1)
+            if 'Link:' in dic.keys():
+                s=dic.get('Link:')[0]
+                print(s)
+                l1=s.split(';',1)[0]
+                l1=l1.split('<',1)[1]
+                l1=l1.split('>',1)[0]
+                print('Case 1 Possible.The entered domain is subject to exploitation.')
+
+                # flask route
+                @app.route('/')
+                def index():
+                    return render_template('CORS.html', link=l1)
+
         
-        else:
-            print('Case 1 Not Possible.Do You Want to check for Case 2?(yes/no)')
-            choice = input(modurl)
-            if choice.lower()=='yes':
-                fun3_case2(modurl)
-            elif choice.lower()=='no':
-                print('Okay,Thank you!')
             else:
-                print('Please give a valid input.')
+                print('Case 1 Not Possible.Do You Want to check for Case 2?(yes/no)')
+                choice = input(modurl)
+                if choice.lower()=='yes':
+                    fun3_case2(modurl)
+                elif choice.lower()=='no':
+                    print('Okay,Thank you!')
+                else:
+                    print('Please give a valid input.')
     
     f.close()
 # end of function fun3()
@@ -89,7 +91,30 @@ def fun3_case2(modurl):
     # Here,origin is local variable for fun_case2() and its different from __main__
     origin = input()
 
-    f= open('{}_response.json'.format(modurl))
+    os.system("curl {} -I -H origin:{} > {}.txt ".format(url, origin, modurl))
+    dict1 = {}
+    # with open("{}.txt".format(modurl)) as fh:
+
+    #     for line in fh:
+
+    #     # reads each line and trims of extra spaces
+    #     s# and gives only the valid words
+    #         command, description = line.strip().split(None,1)
+    #         dict1[command] = description.strip()
+    with open("{}.txt".format(modurl)) as f:
+        for line in f:
+            if line.strip():  # non-empty line?
+                key, value = line.split(None, 1)  # None means 'all whitespace', the default
+                dict1[key] = value.split()
+
+    # creating json file
+    # the JSON file is named as {modurl_response}
+    out_file = open("{}_response.json".format(modurl), "w")
+    json.dump(dict1, out_file, indent=4, sort_keys=False)
+    out_file.close()
+
+    # opens the json file in variable f,and json.load the f into dic variable
+    f = open('{}_response.json'.format(modurl))
     dic = json.load(f)
 
     if 'Access-Control-Allow-Origin:' and 'Access-Control-Allow-Credentials:' in dic.keys():
@@ -112,8 +137,11 @@ if __name__ =='__main__':
     origin = input()
 
 
-    if 'www.' in url:
-        modurl = url.split('www.',1)[1]
+    if 'www.' or 'api.' in url:
+        if 'www.' in url:
+            modurl = url.split('www.',1)[1]
+        elif 'api.' in url:
+            modurl = url.split('api.',1)[1]
     else:
         if 'http' or 'https' in url:
             modurl = url.split('://',1)[1]
