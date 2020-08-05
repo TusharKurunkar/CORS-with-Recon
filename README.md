@@ -1,6 +1,6 @@
 # Recon
 
-You Need curl to be installed into your system
+You Need curl to be installed into your system.
 To download the very latest source from the Git server do this:
 
 `git clone https://github.com/curl/curl.git`
@@ -11,3 +11,7 @@ You Need Flask to be installed into your system
 To download Flask:
 
 `pip install flask`
+
+Note:
+
+You need to save Sublis3r and dirsearch into this directory.
