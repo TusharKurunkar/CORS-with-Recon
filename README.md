@@ -15,3 +15,7 @@ To download Flask:
 Note:
 
 You need to save Sublis3r and dirsearch into this directory.
+
+# Usage
+
+`python main.py`
